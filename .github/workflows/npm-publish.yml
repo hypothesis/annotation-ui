@@ -1,0 +1,24 @@
+name: Publish annotation-ui package
+on:
+  release:
+    types:
+      - published
+jobs:
+  build-and-publish-package:
+    runs-on: ubuntu-latest
+    steps:
+    - name: Checkout
+      uses: actions/checkout@v4
+    - name: Setup Nodejs
+      uses: actions/setup-node@v4
+      with:
+        node-version: '22'
+        registry-url: 'https://registry.npmjs.org'
+    - name: Install
+      run: yarn install --immutable
+    - name: Build lib files
+      run: yarn build
+    - name: Publish package
+      run: npm publish --access public
+      env:
+        NODE_AUTH_TOKEN: ${{ secrets.NPM_TOKEN }}

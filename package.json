@@ -1,0 +1,106 @@
+{
+  "name": "@hypothesis/annotation-ui",
+  "version": "0.1.0",
+  "description": "UI components to simplify rendering Hypothesis annotation cards in Preact + Tailwind-based applications",
+  "license": "BSD-2-Clause",
+  "homepage": "https://hypothes.is",
+  "type": "module",
+  "main": "./lib/index.js",
+  "exports": {
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    },
+    "./StyledTest.css": {
+      "style": "./dist/StyledTest.css",
+      "default": "./dist/StyledTest.css"
+    }
+  },
+  "files": [
+    "lib"
+  ],
+  "scripts": {
+    "build-lib": "babel src/ --out-dir lib/ --extensions '.js,.ts,.tsx' --source-maps --ignore '**/test'",
+    "build": "yarn build-lib && tsc --build tsconfig.json && cp ./src/StyledText.css ./lib/StyledText.css",
+    "typecheck": "tsc --build tsconfig.json",
+    "lint": "eslint --cache .",
+    "checkformatting": "prettier --cache --check '**/*.{js,scss,ts,tsx,md}'",
+    "format": "prettier --cache --list-different --write '**/*.{js,scss,ts,tsx,md}'",
+    "test": "gulp test"
+  },
+  "peerDependencies": {
+    "@hypothesis/frontend-shared": "^9.4.0",
+    "dompurify": "^3.0.0",
+    "escape-html": "^1.0.3",
+    "katex": "^0.16.0",
+    "showdown": "^2.0.0"
+  },
+  "devDependencies": {
+    "@babel/cli": "^7.1.6",
+    "@babel/core": "^7.1.6",
+    "@babel/preset-env": "^7.1.6",
+    "@babel/preset-react": "^7.0.0",
+    "@babel/preset-typescript": "^7.16.7",
+    "@hypothesis/frontend-build": "^4.0.0",
+    "@hypothesis/frontend-shared": "^9.4.0",
+    "@hypothesis/frontend-testing": "^1.7.1",
+    "@rollup/plugin-babel": "^6.0.0",
+    "@rollup/plugin-commonjs": "^28.0.0",
+    "@rollup/plugin-node-resolve": "^16.0.0",
+    "@rollup/plugin-virtual": "^3.0.0",
+    "@trivago/prettier-plugin-sort-imports": "^5.2.0",
+    "@types/chai": "^5.0.0",
+    "@types/dompurify": "^3.0.0",
+    "@types/escape-html": "^1.0.1",
+    "@types/katex": "^0.16.0",
+    "@types/node": "^22.14.1",
+    "@types/showdown": "^2.0.0",
+    "@types/sinon": "^17.0.3",
+    "@vitest/browser": "^3.1.1",
+    "@vitest/coverage-istanbul": "^3.1.1",
+    "@vitest/eslint-plugin": "^1.1.44",
+    "autoprefixer": "^10.0.1",
+    "axe-core": "^4.0.0",
+    "babel-plugin-istanbul": "^7.0.0",
+    "babel-plugin-mockable-imports": "^2.0.1",
+    "chai": "^5.0.0",
+    "classnames": "^2.2.4",
+    "dompurify": "^3.0.0",
+    "enzyme": "^3.8.0",
+    "enzyme-adapter-preact-pure": "^4.0.1",
+    "escape-html": "^1.0.3",
+    "eslint": "^9.27.0",
+    "eslint-config-hypothesis": "^3.3.1",
+    "eslint-plugin-jsx-a11y": "^6.10.2",
+    "eslint-plugin-react": "^7.37.5",
+    "eslint-plugin-react-hooks": "^5.2.0",
+    "globals": "^16.2.0",
+    "gulp": "^5.0.0",
+    "gulp-changed": "^5.0.1",
+    "katex": "^0.16.0",
+    "playwright": "^1.51.1",
+    "postcss": "^8.0.3",
+    "preact": "^10.4.0",
+    "prettier": "3.5.3",
+    "rollup": "^4.0.2",
+    "sass": "^1.89.1",
+    "showdown": "^2.0.0",
+    "sinon": "^20.0.0",
+    "tailwindcss": "^3.0.2",
+    "typescript": "^5.0.2",
+    "typescript-eslint": "^8.10.0",
+    "vitest": "^3.1.1"
+  },
+  "prettier": {
+    "arrowParens": "avoid",
+    "singleQuote": true,
+    "importOrder": [
+      "^[./]"
+    ],
+    "importOrderSeparation": true,
+    "plugins": [
+      "@trivago/prettier-plugin-sort-imports"
+    ]
+  },
+  "packageManager": "yarn@3.6.0"
+}
