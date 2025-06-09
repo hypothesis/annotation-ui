@@ -18,4 +18,10 @@ export type {
   MarkdownViewProps,
   MentionPopoverContentProps,
 } from './components';
-export type { Group, GroupType } from './helpers';
+export type {
+  Group,
+  GroupType,
+  Mention,
+  MentionMode,
+  InvalidMentionContent,
+} from './helpers';
