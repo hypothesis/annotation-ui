@@ -79,7 +79,7 @@
     "gulp-changed": "^5.0.1",
     "katex": "^0.16.0",
     "playwright": "^1.51.1",
-    "postcss": "^8.0.3",
+    "postcss": "^8.5.4",
     "preact": "^10.4.0",
     "prettier": "3.5.3",
     "rollup": "^4.0.2",
