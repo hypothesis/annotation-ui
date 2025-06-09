@@ -1,6 +1,6 @@
 # `@hypothesis/annotation-ui`
 
-UI components to simplify rendering Hypothesis annotation cards in preact and tailwind-based applications.
+UI components to simplify rendering Hypothesis annotation cards in Preact + Tailwind-based applications.
 
 ### Installation
 

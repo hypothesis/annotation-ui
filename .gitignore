@@ -5,7 +5,7 @@ coverage/
 
 .eslintcache
 
-# The client uses Yarn rather than npm to manage the lockfile.
+# This project uses Yarn rather than npm to manage the lockfile.
 package-lock.json
 
 .tox

@@ -1,4 +1,4 @@
-name: Publish frontend-shared package
+name: Publish annotation-ui package
 on:
   release:
     types:

@@ -14,10 +14,10 @@ export default function StyledText({
   classes,
   ...restProps
 }: StyledTextProps) {
-  // The language for the quote may be different than the client's UI (set by
+  // The language for the quote may be different from the app's UI (set by
   // `<html lang="...">`).
   //
-  // Use a blank string to indicate that it is unknown and it is up to the user
+  // Use a blank string to indicate that it is unknown, and it is up to the user
   // agent to pick a default or analyze the content and guess.
   //
   // For web documents we could do better here and gather language information
