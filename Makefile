@@ -1,0 +1,52 @@
+.PHONY: default
+default: help
+
+.PHONY: help
+help:
+	@echo "make help              Show this help message"
+	@echo "make build             Build the package"
+	@echo "make checkformatting   Check code formatting"
+	@echo "make clean             Delete development artefacts (cached files etc.)"
+	@echo "make format            Automatically format code"
+	@echo "make lint              Run the code linter(s) and print any warnings"
+	@echo "make sure              Make sure that the formatter, linter, tests, etc all pass"
+	@echo "make test              Run the unit tests once"
+
+.PHONY: test
+test: node_modules/.uptodate
+ifdef ARGS
+	yarn test $(ARGS)
+else
+	yarn test
+endif
+
+.PHONY: lint
+lint: node_modules/.uptodate
+	yarn run lint
+	yarn run typecheck
+
+.PHONY: clean
+clean:
+	rm -f node_modules/.uptodate
+	rm -rf lib
+	rm -rf build
+
+.PHONY: format
+format: node_modules/.uptodate
+	yarn run format
+
+.PHONY: checkformatting
+checkformatting: node_modules/.uptodate
+	yarn run checkformatting
+
+.PHONY: sure
+sure: checkformatting lint test
+
+.PHONY: build
+build: node_modules/.uptodate
+	yarn run build
+
+node_modules/.uptodate: package.json yarn.lock
+	yarn install
+	yarn playwright install chromium
+	@touch $@
