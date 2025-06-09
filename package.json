@@ -53,7 +53,7 @@
     "@types/dompurify": "^3.0.0",
     "@types/escape-html": "^1.0.1",
     "@types/katex": "^0.16.0",
-    "@types/node": "^22.14.1",
+    "@types/node": "^22.15.30",
     "@types/showdown": "^2.0.0",
     "@types/sinon": "^17.0.3",
     "@vitest/browser": "^3.1.1",
