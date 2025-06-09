@@ -82,7 +82,7 @@
     "postcss": "^8.0.3",
     "preact": "^10.4.0",
     "prettier": "3.5.3",
-    "rollup": "^4.0.2",
+    "rollup": "^4.42.0",
     "sass": "^1.89.1",
     "showdown": "^2.0.0",
     "sinon": "^20.0.0",
