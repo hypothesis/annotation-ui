@@ -14,11 +14,12 @@ export default defineConfig({
       headless: true,
       screenshotFailures: false,
       instances: [{ browser: 'chromium' }],
+      viewport: { width: 1024, height: 768 },
     },
 
     // CSS bundle relied upon by accessibility tests (eg. for color-contrast
     // checks).
-    setupFiles: './src/StyledText.css',
+    setupFiles: './build/styles/tailwind.css',
     include: [
       // Test bundle
       './build/scripts/tests.bundle.js',
