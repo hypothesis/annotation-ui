@@ -8,12 +8,12 @@
   "main": "./lib/index.js",
   "exports": {
     ".": {
-      "import": "./dist/index.js",
-      "types": "./dist/index.d.ts"
+      "import": "./lib/index.js",
+      "types": "./lib/index.d.ts"
     },
     "./StyledTest.css": {
-      "style": "./dist/StyledTest.css",
-      "default": "./dist/StyledTest.css"
+      "style": "./lib/StyledTest.css",
+      "default": "./lib/StyledTest.css"
     }
   },
   "files": [
