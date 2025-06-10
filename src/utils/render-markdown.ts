@@ -1,5 +1,5 @@
 import createDOMPurify from 'dompurify';
-import escapeHtml from 'escape-html';
+import escapeHTML from 'escape-html';
 import katex from 'katex';
 import showdown from 'showdown';
 
@@ -134,7 +134,7 @@ function insertMath(html: string, mathBlocks: MathBlock[]) {
         });
       }
     } catch {
-      renderedMath = escapeHtml(block.expression);
+      renderedMath = escapeHTML(block.expression);
     }
     return html.replace(mathPlaceholder(block.id), renderedMath);
   }, html);

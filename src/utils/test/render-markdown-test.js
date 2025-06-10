@@ -1,21 +1,29 @@
+import sinon from 'sinon';
+
 import { renderMathAndMarkdown, $imports } from '../render-markdown';
 
 describe('render-markdown', () => {
   let render;
+  let fakeRenderToString;
+  let fakeEscapeHTML;
 
   beforeEach(() => {
+    fakeRenderToString = sinon.stub().callsFake((input, opts) => {
+      if (opts && opts.displayMode) {
+        return `math+display:${input}`;
+      } else {
+        return `math:${input}`;
+      }
+    });
+    fakeEscapeHTML = sinon.stub().returnsArg(0);
+
     $imports.$mock({
       katex: {
         default: {
-          renderToString: function (input, opts) {
-            if (opts && opts.displayMode) {
-              return 'math+display:' + input;
-            } else {
-              return 'math:' + input;
-            }
-          },
+          renderToString: fakeRenderToString,
         },
       },
+      'escape-html': fakeEscapeHTML,
     });
 
     render = markdown => renderMathAndMarkdown(markdown);
@@ -115,6 +123,27 @@ describe('render-markdown', () => {
         render('one \\(x*2\\) three $$x*3$$'),
         '<p>one math:x*2 three </p>\n<p>math+display:x*3</p>',
       );
+    });
+
+    [{ throws: true }, { throws: false }].forEach(({ throws }) => {
+      it('escapes HTML when katex throws', () => {
+        if (throws) {
+          fakeRenderToString.throws(new Error(''));
+        }
+        render('$$x*2$$');
+
+        if (throws) {
+          assert.calledWith(fakeEscapeHTML, 'x*2');
+        } else {
+          assert.notCalled(fakeEscapeHTML);
+        }
+      });
+    });
+
+    ['$$x*2', 'x*2$$'].forEach(markdown => {
+      it('keeps partially wrapped math blocks unchanged', () => {
+        assert.equal(render(markdown), `<p>${markdown}</p>`);
+      });
     });
   });
 

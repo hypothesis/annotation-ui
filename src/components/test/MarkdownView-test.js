@@ -260,6 +260,22 @@ describe('MarkdownView', () => {
 
       assert.called(fakeClearTimeout);
     });
+
+    it('closes popover when onClose is called', async () => {
+      const wrapper = createComponentWithChildren();
+
+      // Open popover
+      firstMentionElement.dispatchEvent(new MouseEvent('mouseenter'));
+      await waitFor(() => {
+        wrapper.update();
+        return wrapper.find('Popover').prop('open');
+      });
+
+      // Once onClose is called, the popover is closed
+      wrapper.find('Popover').props().onClose();
+      wrapper.update();
+      assert.isFalse(wrapper.find('Popover').prop('open'));
+    });
   });
 
   it(

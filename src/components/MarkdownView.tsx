@@ -251,12 +251,10 @@ export default function MarkdownView(props: MarkdownViewProps) {
           classes="!max-w-[75%]"
           elementRef={mentionsPopoverRef}
         >
-          {popoverContent !== null && (
-            <MentionPopoverContent
-              content={popoverContent}
-              mentionMode={mentionMode}
-            />
-          )}
+          <MentionPopoverContent
+            content={popoverContent ?? ''}
+            mentionMode={mentionMode}
+          />
         </Popover>
       )}
     </div>
