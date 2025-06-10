@@ -32,6 +32,7 @@ export default defineConfig({
       reporter: ['json', 'html'],
       include: ['src/**/*.{ts,tsx}'],
       exclude: excludeFromCoverage,
+      thresholds: { statements: 100 },
     },
   },
 });

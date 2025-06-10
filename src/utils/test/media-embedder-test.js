@@ -164,6 +164,20 @@ describe('sidebar/media-embedder', () => {
     });
   });
 
+  [
+    // Not a "watch" URL
+    'https://www.youtube.com/feed/history',
+    // Missing `v` query param
+    'https://www.youtube.com/watch',
+  ].forEach(url => {
+    it('ignores invalid youtube URLs', () => {
+      const element = domElement(`<a href="${url}">${url}</a>`);
+      mediaEmbedder.replaceLinksWithEmbeds(element);
+
+      assert.isEmpty(findEmbeds(element));
+    });
+  });
+
   it('replaces YouTube share links with iframes', () => {
     const urls = [
       'https://youtu.be/QCkm0lL-6lc',
@@ -230,6 +244,16 @@ describe('sidebar/media-embedder', () => {
         'https://www.youtube.com/embed/QCkm0lL-6lc?end=10&start=5',
       );
     });
+  });
+
+  it('ignores invalid youtube share URLs', () => {
+    // Video ID is missing
+    const url = 'https://youtu.be/';
+    const element = domElement(`<a href="${url}">${url}</a>`);
+
+    mediaEmbedder.replaceLinksWithEmbeds(element);
+
+    assert.isEmpty(findEmbeds(element));
   });
 
   it('replaces Vimeo links with iframes', () => {
