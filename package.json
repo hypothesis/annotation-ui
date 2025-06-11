@@ -86,7 +86,7 @@
     "sass": "^1.89.1",
     "showdown": "^2.0.0",
     "sinon": "^20.0.0",
-    "tailwindcss": "^3.0.2",
+    "tailwindcss": "^4.1.8",
     "typescript": "^5.0.2",
     "typescript-eslint": "^8.10.0",
     "vitest": "^3.1.1"
