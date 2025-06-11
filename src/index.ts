@@ -7,6 +7,7 @@ export {
   MarkdownView,
   MentionPopoverContent,
 } from './components';
+export { documentMetadata } from './helpers';
 export { renderMathAndMarkdown } from './utils';
 
 export type {
@@ -19,6 +20,8 @@ export type {
   MentionPopoverContentProps,
 } from './components';
 export type {
+  DocumentMetadata,
+  DomainAndTitle,
   Group,
   GroupType,
   Mention,

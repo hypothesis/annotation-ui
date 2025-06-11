@@ -1,18 +1,35 @@
-import { checkAccessibility } from '@hypothesis/frontend-testing';
+import {
+  checkAccessibility,
+  mockImportedComponents,
+} from '@hypothesis/frontend-testing';
 import { mount } from '@hypothesis/frontend-testing';
 
-import AnnotationDocumentInfo from '../AnnotationDocumentInfo';
+import AnnotationDocumentInfo, { $imports } from '../AnnotationDocumentInfo';
 
 describe('AnnotationDocumentInfo', () => {
-  const createAnnotationDocumentInfo = props => {
-    return mount(
-      <AnnotationDocumentInfo
-        domain="www.foo.bar"
-        link="http://www.baz"
-        title="Turtles"
-        {...props}
-      />,
-    );
+  let fakeAnnotation;
+  let fakeDomainAndTitle;
+
+  beforeEach(() => {
+    fakeAnnotation = {
+      links: { html: 'https://example.com' },
+    };
+    fakeDomainAndTitle = sinon.stub().returns({
+      titleText: 'Turtles',
+      titleLink: 'http://www.baz',
+      domain: 'www.foo.com',
+    });
+
+    $imports.$mock(mockImportedComponents());
+    $imports.$mock({
+      '../helpers/annotation-metadata': {
+        domainAndTitle: fakeDomainAndTitle,
+      },
+    });
+  });
+
+  const createAnnotationDocumentInfo = () => {
+    return mount(<AnnotationDocumentInfo annotation={fakeAnnotation} />);
   };
 
   it('should render the document title', () => {
@@ -32,7 +49,8 @@ describe('AnnotationDocumentInfo', () => {
   it('does not link to document when no link available', () => {});
 
   it('should render domain if available', () => {
-    const wrapper = createAnnotationDocumentInfo({ link: '' });
+    fakeAnnotation.links.html = '';
+    const wrapper = createAnnotationDocumentInfo();
 
     const link = wrapper.find('a');
     assert.include(wrapper.text(), '"Turtles"');
@@ -42,9 +60,7 @@ describe('AnnotationDocumentInfo', () => {
   it(
     'should pass a11y checks',
     checkAccessibility({
-      content: () => {
-        return createAnnotationDocumentInfo();
-      },
+      content: () => createAnnotationDocumentInfo(),
     }),
   );
 });
