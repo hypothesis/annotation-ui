@@ -1,6 +1,7 @@
 export {
   AnnotationDocumentInfo,
   AnnotationGroupInfo,
+  AnnotationShareControl,
   AnnotationTimestamps,
   AnnotationUser,
   StyledText,
@@ -13,6 +14,7 @@ export { renderMathAndMarkdown } from './utils';
 export type {
   AnnotationDocumentInfoProps,
   AnnotationGroupInfoProps,
+  AnnotationShareControlProps,
   AnnotationTimestampsProps,
   AnnotationUserProps,
   StyledTextProps,
