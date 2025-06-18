@@ -7,6 +7,14 @@ export type Annotation = {
     /** URL to view the annotation by itself. */
     html?: string;
   };
+  permissions: {
+    /** List of principals that can read the annotation */
+    read: string[];
+    /** List of principals that can edit the annotation */
+    update: string[];
+    /** List of principals that can delete the annotation */
+    delete: string[];
+  };
 };
 
 export type DocumentMetadata = {
