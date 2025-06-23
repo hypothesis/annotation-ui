@@ -146,10 +146,10 @@ export default function AnnotationShareControl({
         }
       >
         <div className="p-2 flex flex-col gap-y-2">
-          <h2 className="text-brand text-md font-medium">
+          <h2 className="text-brand text-[14px] font-medium">
             Share this annotation
           </h2>
-          <div className="flex w-full text-base">
+          <div className="flex w-full text-[13px]">
             <InputGroup>
               <Input
                 aria-label="Use this URL to share this annotation"
@@ -166,7 +166,7 @@ export default function AnnotationShareControl({
               />
             </InputGroup>
           </div>
-          <div className="text-base font-normal" data-testid="share-details">
+          <div className="text-[13px] font-normal" data-testid="share-details">
             {inContextAvailable ? (
               <>{annotationSharingInfo}</>
             ) : (
