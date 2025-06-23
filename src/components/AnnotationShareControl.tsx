@@ -11,11 +11,12 @@ import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 import type { Group } from '../helpers';
 import type { Annotation } from '../helpers/annotation-metadata';
 import { isPrivate } from '../helpers/permissions';
+import type { Result } from '../utils/types';
 import { isIOS } from '../utils/user-agent';
 
 export type AnnotationShareControlProps = {
-  /** The annotation in question */
   annotation: Annotation;
+
   /** Group to which the annotation belongs */
   group: Group | null;
 
@@ -23,7 +24,7 @@ export type AnnotationShareControlProps = {
    * Invoked when the URI is copied to the clipboard.
    * It indicates if copying to the clipboard was successful or not.
    */
-  onCopy?: (result: { successful: boolean }) => void;
+  onCopy?: (result: Result<string, Error>) => void;
 };
 
 function selectionOverflowsInputElement() {
@@ -77,9 +78,9 @@ export default function AnnotationShareControl({
   const copyShareLink = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(shareURI!);
-      onCopy?.({ successful: true });
-    } catch {
-      onCopy?.({ successful: false });
+      onCopy?.({ ok: true, value: shareURI! });
+    } catch (error: any) {
+      onCopy?.({ ok: false, error });
     }
   }, [onCopy, shareURI]);
 
