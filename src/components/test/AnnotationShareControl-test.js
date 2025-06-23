@@ -133,17 +133,19 @@ describe('AnnotationShareControl', () => {
       await getIconButton(wrapper, 'CopyIcon').props().onClick();
 
       assert.calledWith(fakeClipboardWriteText, 'https://www.example.com');
-      assert.calledWith(onCopy, { successful: true });
+      assert.calledWith(onCopy, { ok: true, value: 'https://www.example.com' });
     });
 
     it('indicates there was an error if copying was unsuccessful', () => {
-      fakeClipboardWriteText.throws(new Error('Error copying'));
+      const error = new Error('Error copying');
+      fakeClipboardWriteText.throws(error);
+
       const wrapper = createComponent({ onCopy });
       openElement(wrapper);
 
       getIconButton(wrapper, 'CopyIcon').props().onClick();
 
-      assert.calledWith(onCopy, { successful: false });
+      assert.calledWith(onCopy, { ok: false, error });
     });
   });
 
