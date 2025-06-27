@@ -75,8 +75,16 @@
             @apply list-outside list-disc ml-[1em];
         }
 
+        ul > li {
+            @apply list-disc;
+        }
+
         ol {
             @apply list-outside list-decimal ml-[1em];
+        }
+
+        ol > li {
+            @apply list-decimal;
         }
 
         ul > li,
