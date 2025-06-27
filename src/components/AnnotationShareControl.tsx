@@ -1,4 +1,5 @@
 import {
+  CheckIcon,
   CopyIcon,
   IconButton,
   Input,
@@ -11,6 +12,7 @@ import { useCallback, useEffect, useRef, useState } from 'preact/hooks';
 import type { Group } from '../helpers';
 import type { Annotation } from '../helpers/annotation-metadata';
 import { isPrivate } from '../helpers/permissions';
+import { useTimeout } from '../hooks/use-timeout';
 import type { Result } from '../utils/types';
 import { isIOS } from '../utils/user-agent';
 
@@ -75,14 +77,18 @@ export default function AnnotationShareControl({
   const [isOpen, setOpen] = useState(false);
   const wasOpen = useRef(isOpen);
 
+  const [copied, setCopied] = useState(false);
+  const setTimeout = useTimeout();
   const copyShareLink = useCallback(async () => {
     try {
       await navigator.clipboard.writeText(shareURI!);
+      setCopied(true);
+      setTimeout(() => setCopied(false), 1500);
       onCopy?.({ ok: true, value: shareURI! });
     } catch (error: any) {
       onCopy?.({ ok: false, error });
     }
-  }, [onCopy, shareURI]);
+  }, [onCopy, setTimeout, shareURI]);
 
   const toggleSharePanel = () => setOpen(prev => !prev);
 
@@ -160,7 +166,7 @@ export default function AnnotationShareControl({
                 elementRef={inputRef}
               />
               <IconButton
-                icon={CopyIcon}
+                icon={copied ? CheckIcon : CopyIcon}
                 title="Copy share link to clipboard"
                 onClick={copyShareLink}
                 variant="dark"

@@ -1,5 +1,6 @@
 import {
   checkAccessibility,
+  delay,
   mockImportedComponents,
 } from '@hypothesis/frontend-testing';
 import { mount } from '@hypothesis/frontend-testing';
@@ -13,6 +14,7 @@ describe('AnnotationShareControl', () => {
   let fakeGroup;
   let fakeIsPrivate;
   let fakeIsIOS;
+  let fakeUseTimeout;
 
   const getIconButton = (wrapper, iconName) => {
     return wrapper
@@ -63,10 +65,17 @@ describe('AnnotationShareControl', () => {
     fakeIsPrivate = sinon.stub().returns(false);
     fakeIsIOS = sinon.stub().returns(false);
 
+    fakeUseTimeout = sinon
+      .stub()
+      .returns(sinon.stub().callsFake(callback => setTimeout(callback, 0)));
+
     $imports.$mock(mockImportedComponents());
     $imports.$mock({
       '../helpers/permissions': { isPrivate: fakeIsPrivate },
       '../utils/user-agent': { isIOS: fakeIsIOS },
+      '../hooks/use-timeout': {
+        useTimeout: fakeUseTimeout,
+      },
     });
   });
 
@@ -146,6 +155,24 @@ describe('AnnotationShareControl', () => {
       getIconButton(wrapper, 'CopyIcon').props().onClick();
 
       assert.calledWith(onCopy, { ok: false, error });
+    });
+
+    it('replaces copy icon with check and eventually goes back to the copy icon', async () => {
+      const wrapper = createComponent({ onCopy });
+      openElement(wrapper);
+
+      await getIconButton(wrapper, 'CopyIcon').props().onClick();
+      wrapper.update();
+
+      assert.isTrue(getIconButton(wrapper, 'CheckIcon').exists());
+      assert.isFalse(getIconButton(wrapper, 'CopyIcon').exists());
+
+      // Once the timeout clears, the copy icon will be restored
+      await delay(0);
+      wrapper.update();
+
+      assert.isFalse(getIconButton(wrapper, 'CheckIcon').exists());
+      assert.isTrue(getIconButton(wrapper, 'CopyIcon').exists());
     });
   });
 
