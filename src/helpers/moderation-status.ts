@@ -1,15 +1,30 @@
+import type { IconComponent } from '@hypothesis/frontend-shared';
+import {
+  CautionIcon,
+  CheckAllIcon,
+  DottedCircleIcon,
+  RestrictedIcon,
+} from '@hypothesis/frontend-shared';
+
 export type ModerationStatus = 'PENDING' | 'APPROVED' | 'DENIED' | 'SPAM';
 
-export const moderationStatusToLabel: Record<ModerationStatus, string> = {
-  PENDING: 'Pending',
-  APPROVED: 'Approved',
-  DENIED: 'Declined',
-  SPAM: 'Spam',
-} as const;
+/**
+ * Map of moderation statuses to their corresponding human-friendly label and
+ * icon
+ */
+export const moderationStatusInfo: Record<
+  ModerationStatus,
+  { label: string; icon: IconComponent }
+> = {
+  PENDING: { label: 'Pending', icon: DottedCircleIcon },
+  APPROVED: { label: 'Approved', icon: CheckAllIcon },
+  DENIED: { label: 'Declined', icon: RestrictedIcon },
+  SPAM: { label: 'Spam', icon: CautionIcon },
+};
 
-Object.freeze(moderationStatusToLabel);
+Object.freeze(moderationStatusInfo);
 
-const moderationStatuses = Object.keys(moderationStatusToLabel);
+const moderationStatuses = Object.keys(moderationStatusInfo);
 
 /**
  * Whether provided status is a moderation status or not

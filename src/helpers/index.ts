@@ -1,9 +1,6 @@
 export { documentMetadata } from './annotation-metadata';
 export { processAndReplaceMentionElements } from './mentions';
-export {
-  isModerationStatus,
-  moderationStatusToLabel,
-} from './moderation-status';
+export { isModerationStatus, moderationStatusInfo } from './moderation-status';
 
 export type { DocumentMetadata, DomainAndTitle } from './annotation-metadata';
 export type { Group, GroupType } from './groups';

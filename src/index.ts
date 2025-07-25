@@ -12,7 +12,7 @@ export {
 export {
   documentMetadata,
   isModerationStatus,
-  moderationStatusToLabel,
+  moderationStatusInfo,
 } from './helpers';
 export { renderMathAndMarkdown } from './utils';
 
