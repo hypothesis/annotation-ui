@@ -4,11 +4,16 @@ export {
   AnnotationShareControl,
   AnnotationTimestamps,
   AnnotationUser,
-  StyledText,
   MarkdownView,
   MentionPopoverContent,
+  ModerationStatusSelect,
+  StyledText,
 } from './components';
-export { documentMetadata } from './helpers';
+export {
+  documentMetadata,
+  isModerationStatus,
+  moderationStatusToLabel,
+} from './helpers';
 export { renderMathAndMarkdown } from './utils';
 
 export type {
@@ -17,16 +22,18 @@ export type {
   AnnotationShareControlProps,
   AnnotationTimestampsProps,
   AnnotationUserProps,
-  StyledTextProps,
   MarkdownViewProps,
   MentionPopoverContentProps,
+  ModerationStatusSelectProps,
+  StyledTextProps,
 } from './components';
 export type {
   DocumentMetadata,
   DomainAndTitle,
   Group,
   GroupType,
+  InvalidMentionContent,
   Mention,
   MentionMode,
-  InvalidMentionContent,
+  ModerationStatus,
 } from './helpers';
