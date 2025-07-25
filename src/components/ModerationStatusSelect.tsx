@@ -1,17 +1,9 @@
-import type { IconComponent } from '@hypothesis/frontend-shared';
-import {
-  FilterIcon,
-  CautionIcon,
-  RestrictedIcon,
-  CheckAllIcon,
-  DottedCircleIcon,
-  Select,
-} from '@hypothesis/frontend-shared';
+import { FilterIcon, Select } from '@hypothesis/frontend-shared';
 import classnames from 'classnames';
 import { Fragment } from 'preact';
 
 import type { ModerationStatus } from '../helpers';
-import { moderationStatusToLabel } from '../helpers';
+import { moderationStatusInfo } from '../helpers';
 
 export type ModerationStatusSelectProps = {
   alignListbox?: 'right' | 'left';
@@ -31,21 +23,6 @@ export type ModerationStatusSelectProps = {
     }
 );
 
-type Option = {
-  icon: IconComponent;
-  label: string;
-};
-
-const options = new Map<ModerationStatus, Option>([
-  [
-    'PENDING',
-    { label: moderationStatusToLabel.PENDING, icon: DottedCircleIcon },
-  ],
-  ['APPROVED', { label: moderationStatusToLabel.APPROVED, icon: CheckAllIcon }],
-  ['DENIED', { label: moderationStatusToLabel.DENIED, icon: RestrictedIcon }],
-  ['SPAM', { label: moderationStatusToLabel.SPAM, icon: CautionIcon }],
-]);
-
 /**
  * A Select component displaying the list of moderation statuses.
  */
@@ -56,8 +33,12 @@ export default function ModerationStatusSelect({
   alignListbox = 'right',
   disabled,
 }: ModerationStatusSelectProps) {
-  const selectedName = selected ? options.get(selected)!.label : undefined;
-  const SelectedIcon = selected ? options.get(selected)!.icon : Fragment;
+  const selectedName = selected
+    ? moderationStatusInfo[selected]!.label
+    : undefined;
+  const SelectedIcon = selected
+    ? moderationStatusInfo[selected]!.icon
+    : Fragment;
 
   return (
     <Select
@@ -89,14 +70,16 @@ export default function ModerationStatusSelect({
           All
         </Select.Option>
       )}
-      {[...options.entries()].map(([status, { label, icon: Icon }]) => (
-        <Select.Option key={status} value={status}>
-          <div className="flex gap-x-1.5 items-center text-grey-7">
-            <Icon />
-            {label}
-          </div>
-        </Select.Option>
-      ))}
+      {Object.entries(moderationStatusInfo).map(
+        ([status, { label, icon: Icon }]) => (
+          <Select.Option key={status} value={status}>
+            <div className="flex gap-x-1.5 items-center text-grey-7">
+              <Icon />
+              {label}
+            </div>
+          </Select.Option>
+        ),
+      )}
     </Select>
   );
 }
