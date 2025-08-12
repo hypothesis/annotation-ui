@@ -15,14 +15,15 @@ describe('Excerpt', () => {
 
   let fakeObserveElementSize;
 
-  function createExcerpt(props = {}, content = DEFAULT_CONTENT) {
+  function createExcerpt(
+    { inlineControls, ...props } = {},
+    content = DEFAULT_CONTENT,
+  ) {
+    const modeProps = inlineControls
+      ? { mode: 'inline-control' }
+      : { mode: 'controlled', collapsed: true };
     return mount(
-      <Excerpt
-        collapse={true}
-        collapsedHeight={40}
-        inlineControls={false}
-        {...props}
-      >
+      <Excerpt collapsedHeight={40} {...modeProps} {...props}>
         {content}
       </Excerpt>,
       { connected: true },
@@ -43,9 +44,8 @@ describe('Excerpt', () => {
   });
 
   function getExcerptHeight(wrapper) {
-    return wrapper.find('[data-testid="excerpt-container"]').prop('style')[
-      'max-height'
-    ];
+    return wrapper.find('[data-testid="excerpt-container"]').prop('style')
+      .maxHeight;
   }
 
   it('renders content in container', () => {
@@ -154,6 +154,24 @@ describe('Excerpt', () => {
       button = getToggleButton(wrapper);
       assert.equal(button.prop('expanded'), true);
       assert.equal(button.text(), 'Less');
+    });
+
+    it('allows control text to be customized', () => {
+      const expandText = 'Expand';
+      const collapseText = 'Collapse';
+      const wrapper = createExcerpt(
+        {
+          inlineControls: true,
+          expandText,
+          collapseText,
+        },
+        TALL_DIV,
+      );
+
+      assert.equal(getToggleButton(wrapper).text(), expandText);
+      act(() => getToggleButton(wrapper).props().onClick());
+      wrapper.update();
+      assert.equal(getToggleButton(wrapper).text(), collapseText);
     });
   });
 
