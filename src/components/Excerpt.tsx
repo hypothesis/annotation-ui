@@ -201,8 +201,8 @@ export default function Excerpt({
           'absolute w-full bottom-0 h-touch-minimum',
           {
             // For expandable excerpts not using inlineControls, style this
-            // element with a custom shadow-like gradient
-            'bg-gradient-to-b from-excerpt-stop-1 via-excerpt-stop-2 to-excerpt-stop-3':
+            // element with a shadow-like gradient
+            'bg-gradient-to-b from-white/0 via-95% via-black/10 to-100% to-black/15':
               !inlineControls && isExpandable,
             'bg-none': inlineControls,
             // Don't make this shadow visible OR clickable if there's nothing
