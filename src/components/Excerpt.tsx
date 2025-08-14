@@ -5,21 +5,48 @@ import { useCallback, useLayoutEffect, useRef, useState } from 'preact/hooks';
 
 import { observeElementSize } from '../utils/observe-element-size';
 
-type InlineControlsProps = {
+type InlineControlExcerptProps = {
+  /**
+   * The excerpt provides internal controls to expand and collapse
+   * the content.
+   */
+  inlineControl: true;
+
+  /**
+   * Text on inline control when clicking it will expand the content.
+   * Defaults to 'More'.
+   */
+  inlineControlExpandText?: string;
+
+  /**
+   * Text on inline control when clicking it will collapse the content.
+   * Defaults to 'Less'.
+   */
+  inlineControlCollapseText?: string;
+
+  /** Additional styles to pass to the inline controls element. */
+  inlineControlStyle?: JSX.CSSProperties;
+  /** Additional CSS classes to pass to the inline controls element. */
+  inlineControlClasses?: string | string[];
+};
+
+type InlineControlProps = InlineControlExcerptProps & {
   isCollapsed: boolean;
   setCollapsed: (collapsed: boolean) => void;
-  linkStyle: JSX.CSSProperties;
 };
 
 /**
  * An optional toggle link at the bottom of an excerpt which controls whether
  * it is expanded or collapsed.
  */
-function InlineControls({
+function InlineControl({
   isCollapsed,
   setCollapsed,
-  linkStyle,
-}: InlineControlsProps) {
+  inlineControlExpandText = 'More',
+  inlineControlCollapseText = 'Less',
+  inlineControlStyle,
+  inlineControlClasses,
+}: InlineControlProps) {
   return (
     <div
       className={classnames(
@@ -42,40 +69,30 @@ function InlineControls({
           onClick={() => setCollapsed(!isCollapsed)}
           expanded={!isCollapsed}
           title="Toggle visibility of full excerpt text"
-          style={linkStyle}
+          style={inlineControlStyle}
+          classes={inlineControlClasses}
           underline="always"
           inline
         >
-          {isCollapsed ? 'More' : 'Less'}
+          {isCollapsed ? inlineControlExpandText : inlineControlCollapseText}
         </LinkButton>
       </div>
     </div>
   );
 }
 
-const noop = () => {};
+type ExternalControlExcerptProps = {
+  /**
+   * The caller is responsible for providing their own collapse/expand control,
+   * in combination with `collapsed` and `onToggleCollapsed` props.
+   */
+  inlineControl: false;
+};
 
 export type ExcerptProps = {
   children?: ComponentChildren;
 
-  /**
-   * If `true`, the excerpt provides internal controls to expand and collapse
-   * the content. If `false`, the caller sets the collapsed state via the
-   * `collapse` prop.  When using inline controls, the excerpt is initially
-   * collapsed.
-   */
-  inlineControls?: boolean;
-
-  /**
-   * If the content should be truncated if its height exceeds
-   * `collapsedHeight + overflowThreshold`. This prop is only used if
-   * `inlineControls` is false.
-   */
-  collapse?: boolean;
-
-  /**
-   * Maximum height of the container, in pixels, when it is collapsed.
-   */
+  /** Maximum height of the container, in pixels, when it is collapsed. */
   collapsedHeight: number;
 
   /**
@@ -85,45 +102,78 @@ export type ExcerptProps = {
   overflowThreshold?: number;
 
   /**
-   * Called when the content height exceeds or falls below
-   * `collapsedHeight + overflowThreshold`.
+   * Whether a shadow is drawn at the bottom of collapsed content, to hint that
+   * content is being hidden.
+   *
+   * The shadow area can be clicked to expand the container so the content is
+   * fully visible.
+   *
+   * Defaults to `false` for excerpts with inline control, and `true` for
+   * excerpts with external control.
    */
-  onCollapsibleChanged?: (isCollapsible: boolean) => void;
+  shadow?: boolean;
 
   /**
-   * When `inlineControls` is `false`, this function is called when the user
-   * requests to expand the content by clicking a zone at the bottom of the
-   * container.
+   * If the content should be truncated if its height exceeds
+   * `collapsedHeight + overflowThreshold`.
+   *
+   * Use this prop in combination with `onToggleCollapsed` to make this excerpt
+   * a controlled component.
+   *
+   * Defaults to `true`.
+   */
+  collapsed?: boolean;
+
+  /**
+   * If this function is provided, it is called when the user requests to expand
+   * the content by clicking the shadowed zone at the bottom of the container
+   * (if `shadow` is `true`) or the inline control (if `inlineControl` is `true`)
    */
   onToggleCollapsed?: (collapsed: boolean) => void;
 
   /**
-   * Additional styles to pass to the inline controls element.
-   * Ignored if inlineControls is `false`.
+   * Called when the content height exceeds or falls below
+   * `collapsedHeight + overflowThreshold`.
    */
-  inlineControlsLinkStyle?: JSX.CSSProperties;
-};
+  onCollapsibleChanged?: (isCollapsible: boolean) => void;
+} & (InlineControlExcerptProps | ExternalControlExcerptProps);
 
 /**
  * A container which truncates its content when they exceed a specified height.
  *
  * The collapsed state of the container can be handled either via internal
- * controls (if `inlineControls` is `true`) or by the caller using the
- * `collapse` prop.
+ * controls (if `inlineControls` is `true`) or by the caller using a custom
+ * control.
  */
 export default function Excerpt({
   children,
-  collapse = false,
+  collapsed,
   collapsedHeight,
-  inlineControls = true,
-  onCollapsibleChanged = noop,
-  onToggleCollapsed = noop,
+  onCollapsibleChanged,
+  onToggleCollapsed,
   overflowThreshold = 0,
-  inlineControlsLinkStyle = {},
+  shadow,
+  ...rest
 }: ExcerptProps) {
-  const [collapsedByInlineControls, setCollapsedByInlineControls] =
-    useState(true);
+  // If `collapsed` is present, treat this as a controlled component
+  const isControlled = typeof collapsed === 'boolean';
+  // Only use this local state if Excerpt is uncontrolled
+  const [uncontrolledCollapsed, setUncontrolledCollapsed] = useState(
+    collapsed ?? true,
+  );
+  const isCollapsed = isControlled ? collapsed : uncontrolledCollapsed;
+  const setCollapsed = useCallback(
+    (collapsed: boolean) => {
+      onToggleCollapsed?.(collapsed);
+      if (!isControlled) {
+        setUncontrolledCollapsed(collapsed);
+      }
+    },
+    [isControlled, onToggleCollapsed],
+  );
 
+  const inlineControl = rest.inlineControl;
+  const withShadow = shadow ?? !inlineControl;
   const contentElement = useRef<HTMLDivElement | null>(null);
 
   // Measured height of `contentElement` in pixels
@@ -138,7 +188,7 @@ export default function Excerpt({
     // prettier-ignore
     const isCollapsible =
       newContentHeight > (collapsedHeight + overflowThreshold);
-    onCollapsibleChanged(isCollapsible);
+    onCollapsibleChanged?.(isCollapsible);
   }, [collapsedHeight, onCollapsibleChanged, overflowThreshold]);
 
   useLayoutEffect(() => {
@@ -154,18 +204,12 @@ export default function Excerpt({
   // expanding/collapsing the content.
   // prettier-ignore
   const isOverflowing = contentHeight > (collapsedHeight + overflowThreshold);
-  const isCollapsed = inlineControls ? collapsedByInlineControls : collapse;
   const isExpandable = isOverflowing && isCollapsed;
 
-  const contentStyle: Record<string, number> = {};
+  const contentStyle: JSX.CSSProperties = {};
   if (contentHeight !== 0) {
-    contentStyle['max-height'] = isExpandable ? collapsedHeight : contentHeight;
+    contentStyle.maxHeight = isExpandable ? collapsedHeight : contentHeight;
   }
-
-  const setCollapsed = (collapsed: boolean) =>
-    inlineControls
-      ? setCollapsedByInlineControls(collapsed)
-      : onToggleCollapsed(collapsed);
 
   return (
     <div
@@ -200,23 +244,23 @@ export default function Excerpt({
           'transition-[opacity] duration-150 ease-linear',
           'absolute w-full bottom-0 h-touch-minimum',
           {
-            // For expandable excerpts not using inlineControls, style this
-            // element with a shadow-like gradient
+            // For expandable excerpts with shadow, style this element with a
+            // shadow-like gradient
             'bg-gradient-to-b from-white/0 via-95% via-black/10 to-100% to-black/15':
-              !inlineControls && isExpandable,
-            'bg-none': inlineControls,
-            // Don't make this shadow visible OR clickable if there's nothing
+              withShadow && isExpandable,
+            'bg-none': !withShadow,
+            // Don't make the shadow visible OR clickable if there's nothing
             // to do here (the excerpt isn't expandable)
             'opacity-0 pointer-events-none': !isExpandable,
           },
         )}
         title="Show the full excerpt"
       />
-      {isOverflowing && inlineControls && (
-        <InlineControls
-          isCollapsed={collapsedByInlineControls}
+      {isOverflowing && inlineControl && (
+        <InlineControl
+          isCollapsed={isCollapsed}
           setCollapsed={setCollapsed}
-          linkStyle={inlineControlsLinkStyle}
+          {...rest}
         />
       )}
     </div>
