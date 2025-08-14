@@ -1,6 +1,7 @@
 import { checkAccessibility } from '@hypothesis/frontend-testing';
 import { mount } from '@hypothesis/frontend-testing';
 import { act } from 'preact/test-utils';
+import sinon from 'sinon';
 
 import Excerpt, { $imports } from '../Excerpt';
 
@@ -20,7 +21,7 @@ describe('Excerpt', () => {
       <Excerpt
         collapse={true}
         collapsedHeight={40}
-        inlineControls={false}
+        inlineControl={false}
         {...props}
       >
         {content}
@@ -43,10 +44,12 @@ describe('Excerpt', () => {
   });
 
   function getExcerptHeight(wrapper) {
-    return wrapper.find('[data-testid="excerpt-container"]').prop('style')[
-      'max-height'
-    ];
+    return wrapper.find('[data-testid="excerpt-container"]').prop('style')
+      .maxHeight;
   }
+
+  const getToggleButton = wrapper =>
+    wrapper.find('LinkButton[title="Toggle visibility of full excerpt text"]');
 
   it('renders content in container', () => {
     const wrapper = createExcerpt();
@@ -101,7 +104,7 @@ describe('Excerpt', () => {
     assert.calledWith(onCollapsibleChanged, true);
   });
 
-  it('calls `onToggleCollapsed` when user clicks in bottom area to expand excerpt', () => {
+  it('calls `onToggleCollapsed` when user clicks in bottom shadow to expand excerpt', () => {
     const onToggleCollapsed = sinon.stub();
     const wrapper = createExcerpt({ onToggleCollapsed }, TALL_DIV);
     const control = wrapper.find('[data-testid="excerpt-expand"]');
@@ -111,23 +114,18 @@ describe('Excerpt', () => {
   });
 
   context('when inline controls are enabled', () => {
-    const getToggleButton = wrapper =>
-      wrapper.find(
-        'LinkButton[title="Toggle visibility of full excerpt text"]',
-      );
-
     it('displays inline controls if collapsed', () => {
-      const wrapper = createExcerpt({ inlineControls: true }, TALL_DIV);
-      assert.isTrue(wrapper.exists('InlineControls'));
+      const wrapper = createExcerpt({ inlineControl: true }, TALL_DIV);
+      assert.isTrue(wrapper.exists('InlineControl'));
     });
 
     it('does not display inline controls if not collapsed', () => {
-      const wrapper = createExcerpt({ inlineControls: true }, SHORT_DIV);
-      assert.isFalse(wrapper.exists('InlineControls'));
+      const wrapper = createExcerpt({ inlineControl: true }, SHORT_DIV);
+      assert.isFalse(wrapper.exists('InlineControl'));
     });
 
     it('toggles the expanded state when clicked', () => {
-      const wrapper = createExcerpt({ inlineControls: true }, TALL_DIV);
+      const wrapper = createExcerpt({ inlineControl: true }, TALL_DIV);
       const button = getToggleButton(wrapper);
       assert.equal(getExcerptHeight(wrapper), 40);
       act(() => {
@@ -137,23 +135,82 @@ describe('Excerpt', () => {
       assert.equal(getExcerptHeight(wrapper), 200);
     });
 
-    it("sets button's default state to un-expanded", () => {
-      const wrapper = createExcerpt({ inlineControls: true }, TALL_DIV);
-      const button = getToggleButton(wrapper);
-      assert.equal(button.prop('expanded'), false);
-      assert.equal(button.text(), 'More');
+    [undefined, 'Show more'].forEach(inlineControlExpandText => {
+      it("sets button's default state to un-expanded", () => {
+        const wrapper = createExcerpt(
+          { inlineControl: true, inlineControlExpandText },
+          TALL_DIV,
+        );
+        const button = getToggleButton(wrapper);
+        assert.equal(button.prop('expanded'), false);
+        assert.equal(button.text(), inlineControlExpandText ?? 'More');
+      });
     });
 
-    it("changes button's state to expanded when clicked", () => {
-      const wrapper = createExcerpt({ inlineControls: true }, TALL_DIV);
-      let button = getToggleButton(wrapper);
-      act(() => {
-        button.props().onClick();
+    [undefined, 'Show less'].forEach(inlineControlCollapseText => {
+      it("changes button's state to expanded when clicked", () => {
+        const wrapper = createExcerpt(
+          { inlineControl: true, inlineControlCollapseText },
+          TALL_DIV,
+        );
+        let button = getToggleButton(wrapper);
+        act(() => {
+          button.props().onClick();
+        });
+        wrapper.update();
+        button = getToggleButton(wrapper);
+        assert.equal(button.prop('expanded'), true);
+        assert.equal(button.text(), inlineControlCollapseText ?? 'Less');
       });
-      wrapper.update();
-      button = getToggleButton(wrapper);
-      assert.equal(button.prop('expanded'), true);
-      assert.equal(button.text(), 'Less');
+    });
+  });
+
+  context('when excerpt is externally controlled', () => {
+    [true, false].forEach(collapsed => {
+      it('calls onToggleCollapsed when toggled via inline control', () => {
+        const fakeOnToggleCollapsed = sinon.stub();
+        const wrapper = createExcerpt(
+          {
+            inlineControl: true,
+            collapsed,
+            onToggleCollapsed: fakeOnToggleCollapsed,
+          },
+          TALL_DIV,
+        );
+
+        getToggleButton(wrapper).props().onClick();
+
+        assert.calledWith(fakeOnToggleCollapsed, !collapsed);
+      });
+    });
+
+    it('calls onToggleCollapsed when toggled via shadow', () => {
+      const fakeOnToggleCollapsed = sinon.stub();
+      const wrapper = createExcerpt(
+        {
+          shadow: true,
+          collapsed: true,
+          onToggleCollapsed: fakeOnToggleCollapsed,
+        },
+        TALL_DIV,
+      );
+
+      wrapper.find('[data-testid="excerpt-expand"]').props().onClick();
+
+      assert.calledWith(fakeOnToggleCollapsed, false);
+    });
+
+    it('updates collapsed state when toggled externally', () => {
+      const wrapper = createExcerpt(
+        { inlineControl: true, collapsed: true },
+        TALL_DIV,
+      );
+      const isCollapsed = () =>
+        wrapper.find('InlineControl').prop('isCollapsed');
+
+      assert.isTrue(isCollapsed());
+      wrapper.setProps({ collapsed: false });
+      assert.isFalse(isCollapsed());
     });
   });
 
@@ -166,7 +223,7 @@ describe('Excerpt', () => {
       },
       {
         name: 'internal controls',
-        content: () => createExcerpt({ inlineControls: true }, TALL_DIV),
+        content: () => createExcerpt({ inlineControl: true }, TALL_DIV),
       },
     ]),
   );
