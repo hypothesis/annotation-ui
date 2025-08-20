@@ -70,6 +70,23 @@ describe('AnnotationTimestamps', () => {
     assert.include(editedTimestamp.text(), '(edited another fuzzy string)');
   });
 
+  [
+    { withEditedTimestamp: true, expectedVariant: 'subtle' },
+    { withEditedTimestamp: 'subtle', expectedVariant: 'subtle' },
+    { withEditedTimestamp: 'prominent', expectedVariant: 'prominent' },
+  ].forEach(({ withEditedTimestamp, expectedVariant }) => {
+    it('renders edited timestamp with expected variant', () => {
+      fakeFormatRelativeDate.onCall(1).returns('another fuzzy string');
+
+      const wrapper = createComponent({ withEditedTimestamp });
+
+      const editedTimestamp = wrapper
+        .find('[data-testid="timestamp-edited"]')
+        .getDOMNode();
+      assert.equal(editedTimestamp.dataset.variant, expectedVariant);
+    });
+  });
+
   it('does not render edited relative date if equivalent to created relative date', () => {
     fakeFormatRelativeDate.returns('equivalent fuzzy strings');
 
