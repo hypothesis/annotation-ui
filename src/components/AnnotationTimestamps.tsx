@@ -4,14 +4,29 @@ import {
   formatRelativeDate,
   formatDateTime,
 } from '@hypothesis/frontend-shared';
+import classnames from 'classnames';
 import { useEffect, useMemo, useState } from 'preact/hooks';
+
+/**
+ * `subtle`: Small text with inherited font weight.
+ * `prominent`: Bold text with inherited font size.
+ */
+export type EditedTimestampVariant = 'subtle' | 'prominent';
 
 export type AnnotationTimestampsProps = {
   annotationCreated: string;
   annotationUpdated: string;
   annotationURL?: string;
-  /** Display a relative last-updated timestamp */
-  withEditedTimestamp?: boolean;
+
+  /**
+   * Whether a relative last-updated timestamp should be displayed or not.
+   * - `false`: do not display edited timestamp
+   * - `true`: display using default variant, `subtle`
+   * - {variant_name}: display using specified variant
+   *
+   * Defaults to `false`.
+   */
+  withEditedTimestamp?: boolean | EditedTimestampVariant;
 };
 
 /**
@@ -72,13 +87,19 @@ export default function AnnotationTimestamps({
     updated && updated.relative !== created.relative
       ? `edited ${updated.relative}`
       : 'edited';
+  const editedTimestampVariant: EditedTimestampVariant =
+    typeof withEditedTimestamp === 'string' ? withEditedTimestamp : 'subtle';
 
   return (
     <div>
       {withEditedTimestamp && (
         <span
-          className="text-color-text-light text-xs italic"
+          className={classnames('text-color-text-light italic', {
+            'text-xs': editedTimestampVariant === 'subtle',
+            'font-bold': editedTimestampVariant === 'prominent',
+          })}
           data-testid="timestamp-edited"
+          data-variant={editedTimestampVariant}
           title={updated.absolute}
         >
           ({editedString}){' '}
