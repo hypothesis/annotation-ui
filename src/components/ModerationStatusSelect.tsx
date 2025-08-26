@@ -54,6 +54,9 @@ export default function ModerationStatusSelect({
           '!bg-green-light !text-green-dark': selected === 'APPROVED',
           '!bg-yellow-light !text-yellow-dark': selected === 'SPAM',
           '!bg-red-light !text-red-dark': selected === 'DENIED',
+          // The styles above override default select disabled styles, so let's
+          // add reduced opacity to those
+          'disabled:opacity-50': selected !== 'PENDING',
         },
       )}
       aria-label="Moderation status"
