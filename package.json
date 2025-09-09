@@ -11,9 +11,9 @@
       "import": "./lib/index.js",
       "types": "./lib/index.d.ts"
     },
-    "./StyledTest.css": {
-      "style": "./lib/StyledTest.css",
-      "default": "./lib/StyledTest.css"
+    "./StyledText.css": {
+      "style": "./lib/StyledText.css",
+      "default": "./lib/StyledText.css"
     }
   },
   "files": [
