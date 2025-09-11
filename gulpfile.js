@@ -1,13 +1,11 @@
 import { buildCSS, runTests } from '@hypothesis/frontend-build';
 import gulp from 'gulp';
 
-import tailwindConfig from './tailwind.config.js';
-
 // The following tasks bundle assets for the pattern library for use locally
 // during development. Bundled JS and CSS are not published with the package.
 
 gulp.task('build-test-css', () =>
-  buildCSS(['./test/tailwind.scss'], { tailwindConfig }),
+  buildCSS(['./test/tailwind.css'], { autoprefixer: false, tailwind: true }),
 );
 
 // Some (eg. a11y) tests rely on CSS bundles. We assume that JS will always take
