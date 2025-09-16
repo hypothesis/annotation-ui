@@ -24,8 +24,8 @@
     "build": "yarn build-lib && tsc --build tsconfig.json && cp ./src/StyledText.css ./lib/StyledText.css",
     "typecheck": "tsc --build tsconfig.json",
     "lint": "eslint --cache .",
-    "checkformatting": "prettier --cache --check '**/*.{js,scss,ts,tsx,md}'",
-    "format": "prettier --cache --list-different --write '**/*.{js,scss,ts,tsx,md}'",
+    "checkformatting": "prettier --cache --check '**/*.{css,js,ts,tsx,md}'",
+    "format": "prettier --cache --list-different --write '**/*.{css,js,ts,tsx,md}'",
     "test": "gulp test"
   },
   "peerDependencies": {
