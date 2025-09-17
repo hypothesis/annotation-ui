@@ -199,7 +199,7 @@ export default function MarkdownView(props: MarkdownViewProps) {
   // a review in the future.
   return (
     <div
-      className={classnames('w-full break-anywhere cursor-text', {
+      className={classnames('w-full wrap-anywhere cursor-text', {
         // A `relative` wrapper around the `Popover` component is needed for
         // when the native Popover API is not supported.
         relative: mentionsEnabled,
