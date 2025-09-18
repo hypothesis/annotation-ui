@@ -1,5 +1,7 @@
-@import 'tailwindcss';
+@import 'tailwindcss' source(none);
 
-@config '../tailwind.config.js';
+@source '../node_modules/@hypothesis/frontend-shared/lib/**/*.js';
+@source '../src/components/**/*.{js,ts,tsx}';
 
+@import '@hypothesis/frontend-shared/tailwind-config.css';
 @import '../src/StyledText.css';
