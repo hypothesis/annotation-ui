@@ -3,6 +3,10 @@
   "version": "1.0.1",
   "description": "UI components to simplify rendering Hypothesis annotation cards in Preact + Tailwind-based applications",
   "license": "BSD-2-Clause",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/hypothesis/annotation-ui.git"
+  },
   "homepage": "https://hypothes.is",
   "type": "module",
   "main": "./lib/index.js",
