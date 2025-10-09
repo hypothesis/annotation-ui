@@ -1,6 +1,6 @@
 {
   "name": "@hypothesis/annotation-ui",
-  "version": "1.0.0",
+  "version": "1.0.1",
   "description": "UI components to simplify rendering Hypothesis annotation cards in Preact + Tailwind-based applications",
   "license": "BSD-2-Clause",
   "homepage": "https://hypothes.is",
