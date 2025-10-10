@@ -15,7 +15,10 @@ describe('MentionPopoverContent', () => {
     const userNotFound = wrapper.find('[data-testid="user-not-found"]');
 
     assert.isTrue(userNotFound.exists());
-    assert.equal('No user with username @invalid exists', userNotFound.text());
+    assert.equal(
+      'User @invalid does not exist or does not have access to this group',
+      userNotFound.text(),
+    );
     assert.isFalse(wrapper.exists('[data-testid="username"]'));
     assert.isFalse(wrapper.exists('[data-testid="display-name"]'));
   });
