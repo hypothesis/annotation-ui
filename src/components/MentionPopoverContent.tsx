@@ -26,8 +26,8 @@ export default function MentionPopoverContent({
       <div className="px-3 py-2">
         {typeof content === 'string' ? (
           <div data-testid="user-not-found">
-            No user with username <span className="font-bold">{content}</span>{' '}
-            exists
+            User <span className="font-bold">{content}</span> does not exist or
+            does not have access to this group
           </div>
         ) : (
           <div className="flex flex-col gap-y-4">
