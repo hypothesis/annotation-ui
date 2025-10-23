@@ -19,6 +19,14 @@ import { isIOS } from '../utils/user-agent';
 export type AnnotationShareControlProps = {
   annotation: Annotation;
 
+  /**
+   * Whether comments mode is enabled or not.
+   *
+   * Will cause some texts to change to use the "comment" terminology rather
+   * than "annotation".
+   */
+  commentsMode?: boolean;
+
   /** Group to which the annotation belongs */
   group: Group | null;
 
@@ -64,12 +72,14 @@ function annotationSharingLink(
  */
 export default function AnnotationShareControl({
   annotation,
+  commentsMode,
   group,
   onCopy,
 }: AnnotationShareControlProps) {
   const annotationIsPrivate = isPrivate(annotation.permissions);
   const inContextAvailable = /^http(s?):/i.test(annotation.uri);
   const shareURI = annotationSharingLink(annotation, inContextAvailable);
+  const entityName = commentsMode ? 'comment' : 'annotation';
 
   const inputRef = useRef<HTMLInputElement | null>(null);
   const shareRef = useRef<HTMLDivElement | null>(null);
@@ -115,18 +125,18 @@ export default function AnnotationShareControl({
   const groupSharingInfo =
     group.type === 'private' ? (
       <span>
-        Only members of the group <em>{group.name}</em> may view this
-        annotation.
+        Only members of the group <em>{group.name}</em> may view this{' '}
+        {entityName}.
       </span>
     ) : (
-      <span>Anyone using this link may view this annotation.</span>
+      <span>Anyone using this link may view this {entityName}.</span>
     );
 
   // However, if the annotation is marked as "only me" (`annotationIsPrivate` is `true`),
   // then group sharing settings are irrelevant—only the author may view the
   // annotation.
   const annotationSharingInfo = annotationIsPrivate ? (
-    <span>Only you may view this annotation.</span>
+    <span>Only you may view this {entityName}.</span>
   ) : (
     groupSharingInfo
   );
@@ -154,12 +164,12 @@ export default function AnnotationShareControl({
       >
         <div className="p-2 flex flex-col gap-y-2">
           <h2 className="text-brand text-[14px] font-medium">
-            Share this annotation
+            Share this {entityName}
           </h2>
           <div className="flex w-full text-[13px]">
             <InputGroup>
               <Input
-                aria-label="Use this URL to share this annotation"
+                aria-label={`Use this URL to share this ${entityName}`}
                 type="text"
                 value={shareURI}
                 readOnly
@@ -178,9 +188,9 @@ export default function AnnotationShareControl({
               <>{annotationSharingInfo}</>
             ) : (
               <>
-                This annotation cannot be shared in its original context because
-                it was made on a document that is not available on the web. This
-                link shares the annotation by itself.
+                This {entityName} cannot be shared in its original context
+                because it was made on a document that is not available on the
+                web. This link shares the {entityName} by itself.
               </>
             )}
           </div>
