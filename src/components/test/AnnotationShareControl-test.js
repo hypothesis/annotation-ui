@@ -197,11 +197,35 @@ describe('AnnotationShareControl', () => {
       isPrivate: true,
       expected: 'Only you may view this annotation.',
     },
-  ].forEach(({ groupType, isPrivate, expected }) => {
+    {
+      groupType: 'private',
+      isPrivate: false,
+      commentsMode: true,
+      expected: 'Only members of the group My Group may view this comment.',
+    },
+    {
+      groupType: 'open',
+      isPrivate: false,
+      commentsMode: true,
+      expected: 'Anyone using this link may view this comment.',
+    },
+    {
+      groupType: 'private',
+      isPrivate: true,
+      commentsMode: true,
+      expected: 'Only you may view this comment.',
+    },
+    {
+      groupType: 'open',
+      isPrivate: true,
+      commentsMode: true,
+      expected: 'Only you may view this comment.',
+    },
+  ].forEach(({ groupType, isPrivate, commentsMode, expected }) => {
     it(`renders the correct sharing information for a ${groupType} group when annotation privacy is ${isPrivate}`, () => {
       fakeIsPrivate.returns(isPrivate);
       fakeGroup.type = groupType;
-      const wrapper = createComponent({ group: fakeGroup });
+      const wrapper = createComponent({ group: fakeGroup, commentsMode });
       openElement(wrapper);
 
       const permissionsEl = wrapper.find('[data-testid="share-details"]');
