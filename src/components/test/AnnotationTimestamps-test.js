@@ -74,6 +74,7 @@ describe('AnnotationTimestamps', () => {
     { withEditedTimestamp: true, expectedVariant: 'subtle' },
     { withEditedTimestamp: 'subtle', expectedVariant: 'subtle' },
     { withEditedTimestamp: 'prominent', expectedVariant: 'prominent' },
+    { withEditedTimestamp: 'highlighted', expectedVariant: 'highlighted' },
   ].forEach(({ withEditedTimestamp, expectedVariant }) => {
     it('renders edited timestamp with expected variant', () => {
       fakeFormatRelativeDate.onCall(1).returns('another fuzzy string');

@@ -10,8 +10,9 @@ import { useEffect, useMemo, useState } from 'preact/hooks';
 /**
  * `subtle`: Small text with inherited font weight.
  * `prominent`: Bold text with inherited font size.
+ * `highlighted`: Brand red text with inherited font size.
  */
-export type EditedTimestampVariant = 'subtle' | 'prominent';
+export type EditedTimestampVariant = 'subtle' | 'prominent' | 'highlighted';
 
 export type AnnotationTimestampsProps = {
   annotationCreated: string;
@@ -94,7 +95,9 @@ export default function AnnotationTimestamps({
     <div>
       {withEditedTimestamp && (
         <span
-          className={classnames('text-color-text-light italic', {
+          className={classnames('italic', {
+            'text-color-text-light': editedTimestampVariant !== 'highlighted',
+            'text-brand': editedTimestampVariant === 'highlighted',
             'text-xs': editedTimestampVariant === 'subtle',
             'font-bold': editedTimestampVariant === 'prominent',
           })}
