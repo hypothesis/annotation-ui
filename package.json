@@ -60,7 +60,7 @@
     "@types/katex": "^0.16.0",
     "@types/node": "^24.0.3",
     "@types/showdown": "^2.0.0",
-    "@types/sinon": "^17.0.3",
+    "@types/sinon": "^21.0.0",
     "@vitest/browser": "^4.0.1",
     "@vitest/browser-playwright": "^4.0.1",
     "@vitest/coverage-istanbul": "^4.0.1",
