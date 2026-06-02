@@ -1741,7 +1741,7 @@ __metadata:
     globals: ^16.2.0
     gulp: ^5.0.1
     gulp-changed: ^5.0.1
-    katex: ^0.16.0
+    katex: ^0.17.0
     playwright: ^1.51.1
     postcss: ^8.5.4
     preact: ^10.4.0
@@ -1757,7 +1757,7 @@ __metadata:
     "@hypothesis/frontend-shared": ^10.2.0
     dompurify: ^3.0.0
     escape-html: ^1.0.3
-    katex: ^0.16.0
+    katex: ^0.17.0
     showdown: ^2.0.0
   languageName: unknown
   linkType: soft
@@ -6234,14 +6234,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"katex@npm:^0.16.0":
-  version: 0.16.25
-  resolution: "katex@npm:0.16.25"
+"katex@npm:^0.17.0":
+  version: 0.17.0
+  resolution: "katex@npm:0.17.0"
   dependencies:
     commander: ^8.3.0
   bin:
     katex: cli.js
-  checksum: 6c73ffd33018c42656bf220889e30738f84a1e00a0e22300ffbabd559880bb3dad33fd3b5e5fcf62addd79c1b31f7c75fcfa6cc8684de6175ce5e30248cff607
+  checksum: 1069bff9893a57534b453191a5242c30e3f533e6cf5fad8301a250aa2f22cfefab4e30def821eb23fee72e33379898d72e3d8b70a845dd0dd0d6d5ec0ab42e34
   languageName: node
   linkType: hard
 
