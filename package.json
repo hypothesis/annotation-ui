@@ -66,7 +66,7 @@
     "@vitest/coverage-istanbul": "^4.0.1",
     "@vitest/eslint-plugin": "^1.1.44",
     "axe-core": "^4.0.0",
-    "babel-plugin-istanbul": "^7.0.0",
+    "babel-plugin-istanbul": "^8.0.0",
     "babel-plugin-mockable-imports": "^2.0.1",
     "chai": "^6.0.1",
     "classnames": "^2.2.4",
