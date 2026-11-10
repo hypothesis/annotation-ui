@@ -1744,7 +1744,7 @@ __metadata:
     globals: ^16.2.0
     gulp: ^5.0.1
     gulp-changed: ^5.0.1
-    katex: ^0.16.0
+    katex: ^0.18.2
     playwright: ^1.51.1
     postcss: ^8.5.4
     preact: ^10.4.0
@@ -1760,7 +1760,7 @@ __metadata:
     "@hypothesis/frontend-shared": ^10.2.0
     dompurify: ^3.0.0
     escape-html: ^1.0.3
-    katex: ^0.16.0
+    katex: ^0.16.0 || ^0.18.2
     showdown: ^2.0.0
   languageName: unknown
   linkType: soft
@@ -3875,6 +3875,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"commander@npm:^15.0.0":
+  version: 15.1.0
+  resolution: "commander@npm:15.1.0"
+  checksum: 6d2cd36d30bfc9ade7672d0a28461fd8a96d6eb10c5beca550d3fb200509065b588797a1c098e18ecac0eb35cfc7acb6870a8cbe566e7d3d82db8d10f47f9144
+  languageName: node
+  linkType: hard
+
 "commander@npm:^2.19.0":
   version: 2.20.3
   resolution: "commander@npm:2.20.3"
@@ -3886,13 +3893,6 @@ __metadata:
   version: 6.2.1
   resolution: "commander@npm:6.2.1"
   checksum: d7090410c0de6bc5c67d3ca41c41760d6d268f3c799e530aafb73b7437d1826bbf0d2a3edac33f8b57cc9887b4a986dce307fa5557e109be40eadb7c43b21742
-  languageName: node
-  linkType: hard
-
-"commander@npm:^8.3.0":
-  version: 8.3.0
-  resolution: "commander@npm:8.3.0"
-  checksum: 0f82321821fc27b83bd409510bb9deeebcfa799ff0bf5d102128b500b7af22872c0c92cb6a0ebc5a4cf19c6b550fba9cedfa7329d18c6442a625f851377bacf0
   languageName: node
   linkType: hard
 
@@ -6205,14 +6205,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"katex@npm:^0.16.0":
-  version: 0.16.25
-  resolution: "katex@npm:0.16.25"
+"katex@npm:^0.18.2":
+  version: 0.18.10
+  resolution: "katex@npm:0.18.10"
   dependencies:
-    commander: ^8.3.0
+    commander: ^15.0.0
   bin:
     katex: cli.js
-  checksum: 6c73ffd33018c42656bf220889e30738f84a1e00a0e22300ffbabd559880bb3dad33fd3b5e5fcf62addd79c1b31f7c75fcfa6cc8684de6175ce5e30248cff607
+  checksum: 50b3870124b15c3c5e3bc4f42c529eb230e0c2d618ea73dbb8b20bcb8d78f55d97fb691750c702105f96f64121aae956d5395ad7e534b22309acae0eb3722be8
   languageName: node
   linkType: hard
 
