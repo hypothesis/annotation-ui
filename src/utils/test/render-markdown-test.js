@@ -234,6 +234,21 @@ describe('render-markdown', () => {
       assert.deepEqual(Array.from(el.querySelector('svg').style), ['width']);
     });
 
+    it('removes `style` attribute from elements with no `style` property', () => {
+      // Simulate older browsers, where MathML elements have no `style`.
+      const styleStub = sinon
+        .stub(MathMLElement.prototype, 'style')
+        .get(() => undefined);
+      try {
+        const el = renderToElement(
+          '<math><mi style="position: fixed; color: red">x</mi></math>',
+        );
+        assert.isFalse(el.querySelector('mi').hasAttribute('style'));
+      } finally {
+        styleStub.restore();
+      }
+    });
+
     it('keeps inline styles used for visual formatting', () => {
       const el = renderToElement(
         '<div style="border: 1px solid #ccc; border-radius: 6px; padding: 12px; ' +
