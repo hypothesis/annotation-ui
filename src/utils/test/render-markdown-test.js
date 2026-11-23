@@ -108,10 +108,10 @@ describe('render-markdown', () => {
     it('removes forms but keeps their controls', () => {
       const el = renderToElement(
         '<form action="https://example.com/collect" method="post">' +
-          '<input name="user"><button>Log in</button></form>',
+          '<input type="password" name="user"><button>Log in</button></form>',
       );
       assert.isNull(el.querySelector('form'));
-      assert.isNotNull(el.querySelector('input[name=user]'));
+      assert.equal(el.querySelector('input[name=user]').type, 'text');
       assert.isNotNull(el.querySelector('button'));
     });
 
